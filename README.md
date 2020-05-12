@@ -2,7 +2,8 @@
 MyReads is a project from Udacity's React Nanodegree course. This is a bookshelf app that lets you to organize books that you have read.
 
 This project was bootstrapped with Create React App. A subset of instructions is shown bellow:
-Table of Contents
+
+#Table of Contents
 
     Folder Structure
     Available Scripts
@@ -12,7 +13,7 @@ Table of Contents
         npm run eject
     Deployment
 
-Folder Structure
+#Folder Structure
 
 my-app/
   README.md
@@ -29,7 +30,7 @@ my-app/
     index.js
     logo.svg
 
-Available Scripts
+#Available Scripts
 
 In the project directory, you can run:
 npm start
