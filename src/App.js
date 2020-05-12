@@ -1,57 +1,51 @@
-import React from 'react'
-import {Route, Link} from 'react-router-dom'
-import * as BooksAPI from './BooksAPI'
-import './App.css'
-import Header from './Header'
-import Bookshelf from './Bookshelf'
-import Search from './Search'
+// @flow
+import React from "react";
+import { Route } from "react-router-dom";
+
+import "./App.css";
+import SearchPage from "./SearchPage";
+import ListBooks from "./ListBooks";
+import * as BooksAPI from "./BooksAPI";
 
 class BooksApp extends React.Component {
   state = {
     books: []
-  }
-  
-  moveBook = (book, shelf) => {
-    if (this.state.books) {
-      BooksAPI.update(book,shelf).then(() => {
-        book.shelf = shelf;
-        this.setState(state => ({
-          books: state.books.filter(b => b.id !== book.id).concat([ book ])
-        }))
-      })
-    }
-  }
+  };
 
   componentDidMount() {
-    BooksAPI.getAll().then((books) => {
-      this.setState({ books })
-    })
+    BooksAPI.getAll().then(data => {
+      this.setState({
+        books: data
+      });
+    });
   }
-  
+
+  handleChangeShelf = (book: any, shelf: string) => {
+    BooksAPI.update(book, shelf).then(response => {
+      this.getBooksOnShelf();
+    });
+  };
+
+  getBooksOnShelf() {
+    BooksAPI.getAll().then(data => {
+      this.setState({
+        books: data
+      });
+    });
+  }
+
   render() {
     return (
       <div className="app">
-        <Route exact path="/" render={() => (
-          <div className="list-books">
-            <Header/>
-            <Bookshelf
-              onMoveBook={this.moveBook}
-              booksOnShelf={this.state.books}
-            />
-            <div className="open-search">
-              <Link to="/search">Add a book</Link>
-            </div>
-          </div>
-        )}/>
-        <Route path="/search" render={() => (
-          <Search
-            onMoveBook={this.moveBook}
-            booksOnShelf={this.state.books}
-          />
-        )}/>
+        <Route exact path="/" render={() => <ListBooks booksOnShelf={this.state.books} />} />
+        <Route
+          path="/search"
+          render={() =>
+            <SearchPage onChangeShelf={this.handleChangeShelf} booksOnShelf={this.state.books} />}
+        />
       </div>
-    )
+    );
   }
 }
 
-export default BooksApp
+export default BooksApp;
